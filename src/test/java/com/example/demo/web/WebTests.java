@@ -49,4 +49,12 @@ class WebTests {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void testGetStatistiquesWithoutCar() throws Exception {
+        when(statistiqueImpl.prixMoyen()).thenThrow(new ArithmeticException());
+        mockMvc.perform(get("/statistique"))
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+    }
 }
