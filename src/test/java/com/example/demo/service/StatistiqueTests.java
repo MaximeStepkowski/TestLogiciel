@@ -16,10 +16,9 @@ public class StatistiqueTests {
     StatistiqueImpl statistiqueImpl;
 
     @Test
-    void getPrixMockBean(){
+    void testGetPrix(){
         Voiture voiture = new Voiture("Opel",2000);
-        when(voiture.getPrix()).thenReturn(1);
-        assertEquals(1, voiture.getPrix());
+        assertEquals(2000, voiture.getPrix());
     }
 
     @Test
