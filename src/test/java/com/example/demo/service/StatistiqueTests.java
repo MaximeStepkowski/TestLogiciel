@@ -13,21 +13,26 @@ import static org.mockito.Mockito.*;
 public class StatistiqueTests {
 
     @MockBean
-    StatistiqueImpl statistiqueImpl;
+    Voiture voiture;
 
     @Test
     void testGetPrix(){
-        Voiture voiture = new Voiture("Opel",2000);
-        assertEquals(2000, voiture.getPrix());
+        Voiture voiture = new Voiture("Opel",2_000);
+        assertEquals(2_000, voiture.getPrix());
     }
 
     @Test
     void testPrixMoyen(){
-        when(statistiqueImpl.prixMoyen()).thenReturn(new Echantillon(2,1));
-        Voiture voiture = new Voiture("Opel",2000);
-        Voiture voiture2 = new Voiture("Mclaren",2_000_000);
+        StatistiqueImpl statistiqueImpl = new StatistiqueImpl();
+
+        when(voiture.getPrix()).thenReturn(2_000);
+
+        Voiture voiture2 = mock(Voiture.class);
+        when(voiture2.getPrix()).thenReturn(2_000_000);
+
         statistiqueImpl.ajouter(voiture);
         statistiqueImpl.ajouter(voiture2);
-        assertEquals(1, statistiqueImpl.prixMoyen().prixMoyen);
+
+        assertEquals(1_001_000, statistiqueImpl.prixMoyen().prixMoyen);
     }
 }
