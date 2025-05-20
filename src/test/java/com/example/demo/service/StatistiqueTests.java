@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
@@ -12,28 +13,35 @@ import static org.mockito.Mockito.*;
 public class StatistiqueTests {
 
     @MockBean
-    StatistiqueImpl statistiqueImpl;
+    Voiture voiture;
 
     @Test
-    void test_ajouter(){
-        doNothing().when(statistiqueImpl).ajouter(new Voiture("McLaren", 2_000_000));
+    void testGetPrix(){
+        Voiture voiture = new Voiture("Opel",2_000);
+        assertEquals(2_000, voiture.getPrix());
     }
 
     @Test
-    void test_prix_moyen_throw() {
-        doThrow(ArithmeticException.class).when(statistiqueImpl).prixMoyen();
+    void testPrixMoyen(){
+        StatistiqueImpl statistiqueImpl = new StatistiqueImpl();
+
+        when(voiture.getPrix()).thenReturn(2_000);
+
+        Voiture voiture2 = mock(Voiture.class);
+        when(voiture2.getPrix()).thenReturn(2_000_000);
+
+        statistiqueImpl.ajouter(voiture);
+        statistiqueImpl.ajouter(voiture2);
+
+        assertEquals(1_001_000, statistiqueImpl.prixMoyen().prixMoyen);
     }
 
     @Test
-    void test_prix_moyen_une_voiture() {
-        doNothing().when(statistiqueImpl).ajouter(new Voiture("Opel",2000));
-        when(statistiqueImpl.prixMoyen()).thenReturn(new Echantillon(1, 2000));
-    }
-
-    @Test
-    void test_prix_moyen_plusieurs_voitures() {
-        doNothing().when(statistiqueImpl).ajouter(new Voiture("Opel",2000));
-        doNothing().when(statistiqueImpl).ajouter(new Voiture("Mclaren",2_000_000));
-        when(statistiqueImpl.prixMoyen()).thenReturn(new Echantillon(2, 1_001_000));
+    void testCreationEchantillon(){
+        Echantillon echantillon = new Echantillon();
+        echantillon.setNombreDeVoitures(2);
+        echantillon.setPrixMoyen(1_000);
+        assertEquals(2, echantillon.getNombreDeVoitures());
+        assertEquals(1_000, echantillon.getPrixMoyen());
     }
 }
